@@ -157,51 +157,6 @@ fi
 
 
 
-git_repo_sync() {
-
-    bkt_assume_role_access_key=$( jq -r '.assume_role_access_key' <<< "${assume_creds_obj}" )
-    bkt_assume_role_secret_key=$( jq -r '.assume_role_secret_key' <<< "${assume_creds_obj}" )
-    bkt_assume_role_sessiontoken=$( jq -r '.assume_role_sessiontoken' <<< "${assume_creds_obj}" )
-
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""bkt_assume_role_access_key:\n" 
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$bkt_assume_role_access_key \n" 
-
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""bkt_assume_role_secret_key:\n" 
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$bkt_assume_role_secret_key \n"
-
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""bkt_assume_role_sessiontoken:\n" 
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$bkt_assume_role_sessiontoken \n"
-
-
-
-    sync_json="${1}"
-
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""sync_json:\n" 
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$sync_json:\n"
-
-    bkt_source=$( jq -r '.source.name' <<< "${sync_json}" )
-    bkt_dest=$( jq -r '.dest.name' <<< "${sync_json}" )
-    
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""bkt_source:\n" 
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$bkt_source \n"
-
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""bkt_dest:\n" 
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$bkt_dest \n"
-
-    
-    #echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""aws s3 ls s3://$bkt_source --human-readable --summarize true \n"
-    #AWS_ACCESS_KEY_ID=${bkt_assume_role_access_key} AWS_SECRET_ACCESS_KEY=${bkt_assume_role_secret_key} AWS_SESSION_TOKEN=${bkt_assume_role_sessiontoken} aws s3 ls s3://$bkt_source --human-readable --summarize 
-
-    #echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""aws s3 ls s3://$bkt_dest \n"
-    #AWS_ACCESS_KEY_ID=${bkt_assume_role_access_key} AWS_SECRET_ACCESS_KEY=${bkt_assume_role_secret_key} AWS_SESSION_TOKEN=${bkt_assume_role_sessiontoken} aws s3 ls s3://$bkt_dest --page-size 1
-
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""aws s3 sync s3://$bkt_source  s3://$bkt_dest \n"
-    AWS_ACCESS_KEY_ID=${bkt_assume_role_access_key} AWS_SECRET_ACCESS_KEY=${bkt_assume_role_secret_key} AWS_SESSION_TOKEN=${bkt_assume_role_sessiontoken} aws s3 sync s3://$bkt_source  s3://$bkt_dest  &> $LOGSDIRFORSCRIPT/s3-sync-$bkt_source-to-$bkt_dest.log
-}
-
-
-
-
 
 
 #### input json file w repos to sync
@@ -246,6 +201,8 @@ for git_repo_object in $(echo "${git_repo_objects}" | jq -rc '.'); do
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""repo_source_url: $repo_source_url\n" 
     rm -rf $TMPDIR/$repo_source_name
     git clone $repo_source_url $TMPDIR/$repo_source_name
+    cd $TMPDIR/$repo_source_name
+    git fetch --all
 
     # pull down target repo
     repo_dest_name=$( jq -r '.name' <<< "${sync_dest}" )
@@ -258,6 +215,8 @@ for git_repo_object in $(echo "${git_repo_objects}" | jq -rc '.'); do
 
     rm -rf $TMPDIR/$repo_dest_name
     git clone $repo_dest_url_w_token $TMPDIR/$repo_dest_name
+    cd $TMPDIR/$repo_dest_name
+    git fetch --all
 
     # rsync source and target
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/\n"
@@ -271,31 +230,31 @@ for git_repo_object in $(echo "${git_repo_objects}" | jq -rc '.'); do
     #git push
 
     # get all branches for source repo
-
     # foreach source repo branch
-
+    cd $TMPDIR/$repo_source_name
+    for branch in $(git branch --all | grep '^\s*remotes' | egrep --invert-match '(:?HEAD|master)$'); do
+        branch_name=$(echo $branch| cut -d'/' -f 3)
+        #git clone -b $branch_name $remote_url $branch_name
+        echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""branch_name: $branch_name\n"  | tee -a $logfile
+    
         # switch source repo to current branch
+        cd $TMPDIR/$repo_source_name
+        git checkout --track origin/"$branch_name"
 
-        # pull down current branch
-
-        # query whether branch exists in target repo
-
-            # create branch if does not exist
+        # create branch if does not exist
+        cd $TMPDIR/$repo_dest_name
+        git checkout --track origin/"$branch_name" || git checkout -b "$branch_name" 
 
         # rsync source repo branch with target branch
+        echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/\n" | tee -a $logfile
+        rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/
 
         # push target branch
+        #git push -u origin "$branch_name"
 
+        diff -r $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/ | tee -a $logfile
+    done
 
-
-    #### cp objects new/modified within data range
-    #git_repo_sync "${git_repo_object}"
-
-
-    #### track cp'd objects in log file
-
-
-    #### verify cp'd objects exists in dest bucket
 
 done
 
