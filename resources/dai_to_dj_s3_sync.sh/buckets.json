@@ -1,0 +1,53 @@
+{
+	"info": "buckets to sync",
+	"buckets": [
+		{
+			"source": {
+				"name": "ibd-sfdc-prod"
+			},
+			"dest": {
+				"name": "djibd-sfdc-prod"
+			}
+		},
+		{
+		    "source": {
+				"name": "ibdetlprod"
+			},
+			"dest": {
+				"name": "djibdetlprod"
+			}
+		},
+		{
+			"source": {
+				"name": "ibdidasfmcdrop"
+			},
+			"dest": {
+				"name": "djibdidasfmcdrop"
+			}
+		},
+		{
+			"source": {
+				"name": "ibdidasaasetldrop"
+			},
+			"dest": {
+				"name": "djibdidasaasetldrop"
+			}
+		},
+		{
+			"source": {
+				"name": "ibdidaadobedrop1"
+			},
+			"dest": {
+				"name": "djibdidaadobedrop1"
+			}
+		},
+		{
+			"source": {
+				"name": "ibdetldev"
+			},
+			"dest": {
+				"name": "djibdetldev"
+			}
+		}
+	]
+}
