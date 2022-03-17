@@ -1,0 +1,51 @@
+# app stuff
+/logs/*
+/tmp/*
+/data/*
+*.ini
+!*.example.ini
+*.cfg
+!*.example.cfg
+*.compiled.bin
+*.param
+!*.example.param
+*.conf.json
+!*.example.conf.json
+*.out.txt
+nohup.out
+/ignore_dir
+
+
+# python stuff
+__pycache__/
+*.pyc
+*.egg
+*.egg-info
+eggs/
+develop-eggs/
+*.whl
+venv/
+env/
+
+# scala stuff
+target/
+project/boot/
+project/build/target
+build/
+*.class
+.cache/
+.history/
+.lib/
+dist/*
+lib_managed/
+src_managed/
+
+
+# node stuff
+node_modules/
+
+
+# c stuff
+*.so
+
+
