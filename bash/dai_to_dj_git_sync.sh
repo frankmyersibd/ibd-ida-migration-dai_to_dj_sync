@@ -53,8 +53,11 @@ encryption_file_enc=$encryption_file.enc
 #rm $encryption_file
 
 
-echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""0:\n" 
+
+echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""\$0:\n" 
 echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$0:\n"
+echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""\$1:\n" 
+echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$1:\n"
 echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""MACHINE:\n" 
 echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$MACHINE:\n"
 echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""PROGNAME:\n" 
@@ -87,7 +90,7 @@ echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$encryption_file:\n"
 usage() {
 
     # Display usage message on standard error
-    echo "Usage: $PROGNAME <data_map_json_file_path>" 1>&2
+    echo "Usage: $PROGNAME <sync_method>" 1>&2
 }
 
 clean_up() {
@@ -96,6 +99,7 @@ clean_up() {
     # Optionally accepts an exit status
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""clean_up $1 triggered\n" >> $logfile
     #rm -f $encryption_file
+    #rm -rf $TMPDIR
     exit $1
 }
 
@@ -157,6 +161,19 @@ fi
 
 
 
+sync_method="$1"
+if [ -z "$sync_method" ]; then
+    sync_method='git'
+elif [ ! -z "$sync_method" ] && [ "$sync_method" = "git" ]; then
+    sync_method='git'
+elif [ ! -z "$sync_method" ] && [ "$sync_method" = "rsync" ]; then
+    sync_method='rsync'
+else
+    sync_method='git'
+fi
+
+echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""sync_method: $sync_method\n"  | tee -a $logfile
+
 
 
 #### input json file w repos to sync
@@ -167,6 +184,130 @@ repos_to_sync=$( jq -rc '.repos' <<< "${repos_to_sync_json}" )
 
 echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""repos_to_sync:\n" 
 echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$repos_to_sync \n"
+
+
+
+
+rsync_sync() {
+
+    repo_json=$1
+
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""repo_json:\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$repo_json \n"
+
+    source_obj=$( jq -rc '.source' <<< "${repo_json}" )
+    dest_obj=$( jq -rc '.dest' <<< "${repo_json}" )
+
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""source_obj:\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$source_obj \n"
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""dest_obj:\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$dest_obj \n"
+
+    source_name=$( jq -r '.name' <<< "${source_obj}" )
+    source_url=$( jq -r '.url' <<< "${source_obj}" )
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""source_name: $source_name\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""source_url: $source_url\n" 
+
+    dest_name=$( jq -r '.name' <<< "${dest_obj}" )
+    dest_url=$( jq -r '.url' <<< "${dest_obj}" )
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""dest_name: $dest_name\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""dest_url: $dest_url\n" 
+
+
+
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$source_name/ $TMPDIR/$dest_name/\n"
+    rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$source_name/ $TMPDIR/$dest_name/
+
+    # commit and push target repo
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""git commit -m \"sync push $LOGDATE\"\n" 
+    cd $TMPDIR/$dest_name
+    git add -A .
+    git commit -m "sync push $LOGDATE"
+    git push --tags origin
+
+
+    # get all branches for source repo
+    # foreach source repo branch
+    cd $TMPDIR/$source_name
+    for branch in $(git branch --all | grep '^\s*remotes' | egrep --invert-match '(:?HEAD|master)$'); do
+        branch_name=$(echo $branch| cut -d'/' -f 3)
+        #git clone -b $branch_name $remote_url $branch_name
+        echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""branch_name: $branch_name\n"  | tee -a $logfile
+    
+        # switch source repo to current branch
+        cd $TMPDIR/$source_name
+        git checkout --track origin/"$branch_name"
+
+        # create branch if does not exist
+        cd $TMPDIR/$dest_name
+        git checkout --track origin/"$branch_name" || git checkout -b "$branch_name" 
+
+        # rsync source repo branch with target branch
+        echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$source_name/ $TMPDIR/$dest_name/\n" | tee -a $logfile
+        rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$source_name/ $TMPDIR/$dest_name/
+
+        # push target branch
+        git add -A .
+        git commit -m "sync push $LOGDATE"
+        git push -u origin "$branch_name"
+        git push --tags origin "$branch_name"
+        diff -r $TMPDIR/$source_name/ $TMPDIR/$dest_name/ | tee -a $logfile
+    done
+
+}
+
+
+
+
+
+
+
+
+
+git_sync() {
+
+    repo_json=$1
+
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""repo_json:\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$repo_json \n"
+
+    source_obj=$( jq -rc '.source' <<< "${repo_json}" )
+    dest_obj=$( jq -rc '.dest' <<< "${repo_json}" )
+
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""source_obj:\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$source_obj \n"
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""dest_obj:\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$dest_obj \n"
+
+    source_name=$( jq -r '.name' <<< "${source_obj}" )
+    source_url=$( jq -r '.url' <<< "${source_obj}" )
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""source_name: $source_name\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""source_url: $source_url\n" 
+
+    dest_name=$( jq -r '.name' <<< "${dest_obj}" )
+    dest_url=$( jq -r '.url' <<< "${dest_obj}" )
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""dest_name: $dest_name\n" 
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""dest_url: $dest_url\n" 
+
+    repo_dest_url_w_token=$( sed 's,https://',"https://$dj_git_token@,g" <<< "${dest_url}" )
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""repo_dest_url_w_token: $repo_dest_url_w_token\n" 
+
+    cd $TMPDIR/$source_name
+    git remote rename origin old-origin
+    git remote add origin $repo_dest_url_w_token
+    git push --all origin 
+    git push --tags origin 
+
+}
+
+
+
+
+
+
+
+
+
 
 
 #### generate dict of source to dest repos
@@ -194,15 +335,18 @@ for git_repo_object in $(echo "${git_repo_objects}" | jq -rc '.'); do
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""sync_dest:\n" 
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$sync_dest \n"
 
-    # pull down source repo
+    
     repo_source_name=$( jq -r '.name' <<< "${sync_source}" )
     repo_source_url=$( jq -r '.url' <<< "${sync_source}" )
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""repo_source_name: $repo_source_name\n" 
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""repo_source_url: $repo_source_url\n" 
+
+    # pull down source repo
     rm -rf $TMPDIR/$repo_source_name
     git clone $repo_source_url $TMPDIR/$repo_source_name
     cd $TMPDIR/$repo_source_name
     git fetch --all
+    git pull --all
 
     # pull down target repo
     repo_dest_name=$( jq -r '.name' <<< "${sync_dest}" )
@@ -217,44 +361,16 @@ for git_repo_object in $(echo "${git_repo_objects}" | jq -rc '.'); do
     git clone $repo_dest_url_w_token $TMPDIR/$repo_dest_name
     cd $TMPDIR/$repo_dest_name
     git fetch --all
+    git pull --all
 
-    # rsync source and target
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/\n"
-    rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/
-
-    # commit and push target repo
-    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""git commit -m \"sync push $LOGDATE\"\n" 
-    cd $TMPDIR/$repo_dest_name
-    #git add -A .
-    #git commit -m "sync push $LOGDATE"
-    #git push
-
-    # get all branches for source repo
-    # foreach source repo branch
-    cd $TMPDIR/$repo_source_name
-    for branch in $(git branch --all | grep '^\s*remotes' | egrep --invert-match '(:?HEAD|master)$'); do
-        branch_name=$(echo $branch| cut -d'/' -f 3)
-        #git clone -b $branch_name $remote_url $branch_name
-        echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""branch_name: $branch_name\n"  | tee -a $logfile
-    
-        # switch source repo to current branch
-        cd $TMPDIR/$repo_source_name
-        git checkout --track origin/"$branch_name"
-
-        # create branch if does not exist
-        cd $TMPDIR/$repo_dest_name
-        git checkout --track origin/"$branch_name" || git checkout -b "$branch_name" 
-
-        # rsync source repo branch with target branch
-        echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/\n" | tee -a $logfile
-        rsync -avz --delete --exclude .git --exclude  ignore_dir --exclude  venv $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/
-
-        # push target branch
-        #git push -u origin "$branch_name"
-
-        diff -r $TMPDIR/$repo_source_name/ $TMPDIR/$repo_dest_name/ | tee -a $logfile
-    done
-
+    # sync source and target file/info
+    if [ "$sync_method" = "git" ]; then
+        git_sync $git_repo_object
+    elif [ "$sync_method" = "rsync" ]; then
+        rsync_sync $git_repo_object
+    else
+        error_exit 'no sync method!'
+    fi
 
 done
 
@@ -264,7 +380,7 @@ done
 echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""SCRIPT_COMPLETE\n" >> $logfile
 
 
-clean_up
+clean_up # TODO delete tmp folder
 
 
 
