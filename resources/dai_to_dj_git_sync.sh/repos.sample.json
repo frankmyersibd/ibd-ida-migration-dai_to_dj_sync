@@ -10,6 +10,16 @@
 				"name": "dj-ibd-ida-dai_to_dj_sync",
 				"url": "https://github.com/newscorp-ghfb/dj-ibd-ida-dai_to_dj_sync.git"
 			}
+		},
+		{
+			"source": {
+				"name": "project-template",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/project-template.git"
+			},
+			"dest": {
+				"name": "dj-ibd-ida-de-project-template",
+				"url": "https://github.com/frankmyersibd/dj-ibd-ida-de-project-template.git"
+			}
 		}
 	]
 }

@@ -1,3 +1,8 @@
+#custom one-off stuff
+repos.json
+
+
+
 # app stuff
 /logs/*
 /tmp/*

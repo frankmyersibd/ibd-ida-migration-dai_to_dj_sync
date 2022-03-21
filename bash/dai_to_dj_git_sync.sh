@@ -178,7 +178,7 @@ echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""sync_method: $sync_method\n"  | tee 
 
 #### input json file w repos to sync
 
-repos_to_sync_json=$(cat $RESOURCESDIR/repos.json)
+repos_to_sync_json=$(cat $RESOURCESDIR/repos.sample.json)
 
 repos_to_sync=$( jq -rc '.repos' <<< "${repos_to_sync_json}" )
 
@@ -293,10 +293,32 @@ git_sync() {
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""repo_dest_url_w_token: $repo_dest_url_w_token\n" 
 
     cd $TMPDIR/$source_name
+
+    original_branches=$(git branch --all | grep '^\s*remotes' | egrep --invert-match '(:?HEAD|master)$')
+
     git remote rename origin old-origin
     git remote add origin $repo_dest_url_w_token
     git push --all origin 
     git push --tags origin 
+
+    cd $TMPDIR/$source_name
+    for branch in $original_branches; do
+        branch_name=$(echo $branch| cut -d'/' -f 3)
+        #git clone -b $branch_name $remote_url $branch_name
+        echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""branch_name: $branch_name\n"  | tee -a $logfile
+    
+        # switch source repo to current branch
+        cd $TMPDIR/$source_name
+        git checkout --track old-origin/"$branch_name"
+
+        # create branch if does not exist
+        #cd $TMPDIR/$dest_name
+        #git checkout --track origin/"$branch_name" || git checkout -b "$branch_name" 
+
+        # push target branch
+        git push -u origin "$branch_name"
+        git push --tags origin "$branch_name"
+    done    
 
 }
 
