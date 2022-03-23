@@ -178,7 +178,7 @@ echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""sync_method: $sync_method\n"  | tee 
 
 #### input json file w repos to sync
 
-repos_to_sync_json=$(cat $RESOURCESDIR/repos.sample.json)
+repos_to_sync_json=$(cat $RESOURCESDIR/repos.json)
 
 repos_to_sync=$( jq -rc '.repos' <<< "${repos_to_sync_json}" )
 
