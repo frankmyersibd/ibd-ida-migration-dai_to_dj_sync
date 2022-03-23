@@ -48,10 +48,13 @@ Large file stuff
 			$> git add .gitattributes
 
 		Then, you will first need to...
-			a) push the files to the LFS: $> git lfs push --all origin master
+			a) push the files to the LFS: $> git lfs push --all origin master. !! don't think you need to do this. i do normal `git push` and it works fine
 			b) push the pointers to GitHub. Here are the commands: $> git push -u origin master
+			you'll see output similar to...
+				Locking support detected on remote "origin". Consider enabling it with:
+  					$ git config lfs.https://gitlab01.daicompanies.com/ibd-analytics/dj_migration/dai_to_dj_sync.git/info/lfs.locksverify true 
 
-		Files on Git LFS are then available on GitHub with the following label: "stored with git lfs"
+		Files on Git LFS are then available on GitHub with the following label next to the file: "stored with git lfs" or "LFS" 
 
 		In order to pull the repository on another device, simply install git-lfs and pull like normal
 

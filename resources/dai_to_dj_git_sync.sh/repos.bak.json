@@ -1,0 +1,25 @@
+{
+	"info": "repos to sync",
+	"repos": [
+		{
+			"source": {
+				"name": "dai_to_dj_sync",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/dj_migration/dai_to_dj_sync.git"
+			},
+			"dest": {
+				"name": "dj-ibd-ida-dai_to_dj_sync",
+				"url_old": "https://github.com/newscorp-ghfb/dj-ibd-ida-dai_to_dj_sync.git"
+			}
+		},
+		{
+			"source": {
+				"name": "project-template",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/project-template.git"
+			},
+			"dest": {
+				"name": "dj-ibd-ida-de-project-template",
+				"url_old": "https://github.com/newscorp-ghfb/dj-ibd-ida-de-project-template.git"
+			}
+		}
+	]
+}

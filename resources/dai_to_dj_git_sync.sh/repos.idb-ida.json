@@ -1,0 +1,385 @@
+{
+	"info": "repos to sync",
+	"repos": [
+		{
+			"source": {
+				"name": "infra-common",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/infra/infra.git"
+			},
+			"dest": {
+				"name": "ibd-ida-infra-common",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-infra-common.git"
+			}
+		},
+		{
+			"source": {
+				"name": "dai_to_dj_sync",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/dj_migration/dai_to_dj_sync.git"
+			},
+			"dest": {
+				"name": "ibd-ida-migration-dai_to_dj_sync",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-migration-dai_to_dj_sync.git"
+			}
+		},
+		{
+			"source": {
+				"name": "dai_to_dj_sync",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/dj_migration/dai_to_dj_sync.git"
+			},
+			"dest": {
+				"name": "ibd-ida-migration-dai_to_dj_sync",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-migration-dai_to_dj_sync.git"
+			}
+		},
+		{
+			"source": {
+				"name": "app_store_connect_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/app_store_connect_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-app_store_connect_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-app_store_connect_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "google-analytics",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/google-analytics.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-google-analytics",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-google-analytics.git"
+			}
+		},
+		{
+			"source": {
+				"name": "sfmc_newsletter_clicks_report_fix",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/sfmc_newsletter_clicks_report_fix.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-sfmc_newsletter_clicks_report_fix",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-sfmc_newsletter_clicks_report_fix.git"
+			}
+		},
+		{
+			"source": {
+				"name": "adobe_product_list",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/adobe_product_list.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-adobe_product_list",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-adobe_product_list.git"
+			}
+		},
+		{
+			"source": {
+				"name": "adobe_product_list",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/adobe_product_list.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-adobe_product_list",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-adobe_product_list.git"
+			}
+		},
+		{
+			"source": {
+				"name": "sfmc_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/sfmc_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-sfmc_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-sfmc_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "qualtrics_csat_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/qualtrics_csat_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-qualtrics_csat_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-qualtrics_csat_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "zoom-etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/zoom-etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-zoom-etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-zoom-etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "segment-streaming-poc",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/segment-streaming-poc.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-zoom-etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-segment-streaming-poc.git"
+			}
+		},
+		{
+			"source": {
+				"name": "selligent_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/selligent_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-selligent_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-selligent_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "adobe_raw_hits_analysis",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/adobe_raw_hits_analysis.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-adobe_raw_hits_analysis",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-adobe_raw_hits_analysis.git"
+			}
+		},
+		{
+			"source": {
+				"name": "on24_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/on24_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-on24_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-on24_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "queryly_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/front_end_data_etl/queryly_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-queryly_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-queryly_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "adobe-etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/adobe-etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-fe-etl-adobe-etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-fe-etl-adobe-etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "monthly_churn_model",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/data_science/monthly_churn_model.git"
+			},
+			"dest": {
+				"name": "ibd-ida-ds-monthly_churn_model",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-ds-monthly_churn_model.git"
+			}
+		},
+		{
+			"source": {
+				"name": "scorecard_webinar_analysis",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/data_science/scorecard_webinar_analysis.git"
+			},
+			"dest": {
+				"name": "ibd-ida-ds-scorecard_webinar_analysis",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-ds-scorecard_webinar_analysis.git"
+			}
+		},
+		{
+			"source": {
+				"name": "sagemaker_common",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/data_science/sagemaker_common.git"
+			},
+			"dest": {
+				"name": "ibd-ida-ds-sagemaker_common",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-ds-sagemaker_common.git"
+			}
+		},
+		{
+			"source": {
+				"name": "sagemaker_custom_docker",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/data_science/sagemaker_custom_docker.git"
+			},
+			"dest": {
+				"name": "ibd-ida-ds-sagemaker_custom_docker",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-ds-sagemaker_custom_docker.git"
+			}
+		},
+		{
+			"source": {
+				"name": "retention-etl-py",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/dashboards_etl/retention-etl-py.git"
+			},
+			"dest": {
+				"name": "ibd-ida-dshbrds-etl-retention-etl-py",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-dshbrds-etl-retention-etl-py.git"
+			}
+		},
+		{
+			"source": {
+				"name": "daily_order_report_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/dashboards_etl/daily_order_report_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-dshbrds-etl-daily_order_report_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-dshbrds-etl-daily_order_report_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "subscription_over_time_using_order_line_id_paid",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/dashboards_etl/subscription_over_time_using_order_line_id_paid.git"
+			},
+			"dest": {
+				"name": "ibd-ida-dshbrds-etl-subscription_over_time_using_order_line_id_paid",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-dshbrds-etl-subscription_over_time_using_order_line_id_paid.git"
+			}
+		},
+		{
+			"source": {
+				"name": "traffic_dashboard_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/dashboards_etl/traffic_dashboard_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-dshbrds-etl-traffic_dashboard_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-dshbrds-etl-traffic_dashboard_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "experian-etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/dashboards_etl/experian-etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-dshbrds-etl-experian-etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-dshbrds-etl-experian-etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "databricks-common",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/databricks-common.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-databricks-common",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-databricks-common.git"
+			}
+		},
+		{
+			"source": {
+				"name": "project-template",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/project-template.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-databricks-common",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-project-template.git"
+			}
+		},
+		{
+			"source": {
+				"name": "ibd_ida_data_maps",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/ibd_ida_data_maps.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-ibd_ida_data_maps",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-ibd_ida_data_maps.git"
+			}
+		},
+		{
+			"source": {
+				"name": "dw_checks",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/dw_checks.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-dw_checks",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-dw_checks.git"
+			}
+		},
+		{
+			"source": {
+				"name": "webinar_data_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/webinar_data_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-webinar_data_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-webinar_data_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "secure_etl",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/secure_etl.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-secure_etl",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-secure_etl.git"
+			}
+		},
+		{
+			"source": {
+				"name": "deapptools-py",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/deapptools-py.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-deapptools-py",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-deapptools-py.git"
+			}
+		},
+		{
+			"source": {
+				"name": "airflow_postgres_redis_celery_docker",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/airflow_postgres_redis_celery_docker.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-airflow_postgres_redis_celery_docker",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-airflow_postgres_redis_celery_docker.git"
+			}
+		},
+		{
+			"source": {
+				"name": "ibd_live_zoom_ingest",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/ibd_live_zoom_ingest.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-ibd_live_zoom_ingest",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-ibd_live_zoom_ingest.git"
+			}
+		},
+		{
+			"source": {
+				"name": "dw_export",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/dw_export.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-dw_export",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-dw_export.git"
+			}
+		},
+		{
+			"source": {
+				"name": "data_ingestion_to_dbks_lake",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/data_ingestion_to_dbks_lake.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-data_ingestion_to_dbks_lake",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-data_ingestion_to_dbks_lake.git"
+			}
+		},
+		{
+			"source": {
+				"name": "analytics_jobs",
+				"url": "git@gitlab01.daicompanies.com:ibd-analytics/engineering/analytics_jobs.git"
+			},
+			"dest": {
+				"name": "ibd-ida-de-analytics_jobs",
+				"url": "https://github.com/newscorp-ghfb/ibd-ida-de-analytics_jobs.git"
+			}
+		}
+	]
+}
