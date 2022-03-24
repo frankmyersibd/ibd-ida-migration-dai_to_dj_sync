@@ -15,16 +15,18 @@ Deploy
 
 Large file stuff
 ------------------------
-- generate test large files with
 
-		$> dd if=/dev/urandom of=resources/dai_to_dj_git_sync.sh/test.largefile.txt bs=150000000 count=1
+#### generate test large files with
 
-			or 
+	$> dd if=/dev/urandom of=resources/dai_to_dj_git_sync.sh/test.largefile.txt bs=150000000 count=1
 
-		$> head -c 150000000 /dev/urandom > resources/dai_to_dj_git_sync.sh/test.largefile.txt
+		or 
+
+	$> head -c 150000000 /dev/urandom > resources/dai_to_dj_git_sync.sh/test.largefile.txt
 
 
 
+#### git lfs poc
 - git lfs - https://towardsdatascience.com/uploading-large-files-to-github-dbef518fa1a
 	- https://git-lfs.github.com/
 

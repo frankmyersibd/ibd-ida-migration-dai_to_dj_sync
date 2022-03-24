@@ -151,6 +151,15 @@ else
     fi
 fi
 
+if command -v git-lfs &> /dev/null
+then
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""git-lfs is installed :)\n" >> $logfile
+else
+    error_msg='git-lfs is not installed :('
+    echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""$error_msg\n" >> $logfile
+    error_exit $error_msg
+fi
+
 #pip3 install virtualenv
 #python3 -m venv venv
 #source "venv/bin/activate"
@@ -296,6 +305,13 @@ git_sync() {
 
     original_branches=$(git branch --all | grep '^\s*remotes' | egrep --invert-match '(:?HEAD|master)$')
 
+    git lfs install
+    for bigfile in `find .  -type f -size +80M -not -path '*/\.git/*'`; do
+        git lfs track $bigfile
+    done
+    git add -A .
+    git commit -m "sync push $LOGDATE"
+
     git remote rename origin old-origin
     git remote add origin $repo_dest_url_w_token
     git push --all origin 
@@ -315,6 +331,12 @@ git_sync() {
         #cd $TMPDIR/$dest_name
         #git checkout --track origin/"$branch_name" || git checkout -b "$branch_name" 
 
+        for bigfile in `find .  -type f -size +80M -not -path '*/\.git/*'`; do
+            git lfs track $bigfile
+        done
+        git add -A .
+        git commit -m "sync push $LOGDATE"
+    
         # push target branch
         git push -u origin "$branch_name"
         git push --tags origin "$branch_name"
