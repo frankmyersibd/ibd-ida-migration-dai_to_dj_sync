@@ -99,7 +99,7 @@ clean_up() {
     # Optionally accepts an exit status
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""clean_up $1 triggered\n" >> $logfile
     #rm -f $encryption_file
-    #rm -rf $TMPDIR
+    rm -rf $TMPDIR
     exit $1
 }
 
