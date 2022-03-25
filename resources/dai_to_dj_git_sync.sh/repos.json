@@ -9,6 +9,7 @@
 			"dest": {
 				"name": "dj-ibd-ida-dai_to_dj_sync",
 				"url_old": "https://github.com/newscorp-ghfb/ibd-ida-migration-dai_to_dj_sync.git",
+				"url_old2": "https://github.com/newscorp-ghfb/ibd-ida-migration-dai_to_dj_sync.git",
 				"url": "https://github.com/frankmyersibd/ibd-ida-migration-dai_to_dj_sync.git"
 			}
 		}
