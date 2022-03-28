@@ -99,7 +99,7 @@ clean_up() {
     # Optionally accepts an exit status
     echo -e "["`date '+%H:%M:%S'`"-L:$LINENO] ""clean_up $1 triggered\n" >> $logfile
     #rm -f $encryption_file
-    rm -rf $TMPDIR
+    #rm -rf $TMPDIR
     exit $1
 }
 
@@ -314,7 +314,8 @@ git_sync() {
 
     git remote rename origin old-origin
     git remote add origin $repo_dest_url_w_token
-    git push --all origin 
+    #git pull -all
+    git push -f --all origin 
     git push --tags origin 
 
     cd $TMPDIR/$source_name
@@ -338,7 +339,8 @@ git_sync() {
         git commit -m "sync push $LOGDATE"
     
         # push target branch
-        git push -u origin "$branch_name"
+        #git pull -all
+        git push -f origin "$branch_name"
         git push --tags origin "$branch_name"
     done    
 
